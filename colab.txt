@@ -1,0 +1,12 @@
+try:
+    import netgen
+except ImportError:
+    !wget "https://fem-on-colab.github.io/releases/ngsolve-install-real.sh" -O "/tmp/ngsolve-install.sh" && bash "/tmp/ngsolve-install.sh"
+    import netgen
+
+
+try:
+    import firedrake
+except ImportError:
+    !wget "https://fem-on-colab.github.io/releases/firedrake-install-real.sh" -O "/tmp/firedrake-install.sh" && bash "/tmp/firedrake-install.sh"
+    import firedrake
