@@ -10,7 +10,7 @@ v = TestFunction(V)
 
 f = Constant(1)
 g = Constant(1)
-bc = DirichletBC(V, Constant(1), (1,))
+bc = DirichletBC(V, Constant(1), (2,3,4))
 
 u.interpolate(Constant(5))
 F = (
