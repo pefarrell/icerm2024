@@ -10,3 +10,5 @@ try:
 except ImportError:
     !wget "https://fem-on-colab.github.io/releases/firedrake-install-real.sh" -O "/tmp/firedrake-install.sh" && bash "/tmp/firedrake-install.sh"
     import firedrake
+
+!python3 -m pip install --no-dependencies git+https://github.com/firedrakeproject/Irksome.git#egg=Irksome
