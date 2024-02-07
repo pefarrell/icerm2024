@@ -12,3 +12,5 @@ except ImportError:
     import firedrake
 
 !python3 -m pip install --no-dependencies git+https://github.com/firedrakeproject/Irksome.git#egg=Irksome
+
+!python3 -m pip install --no-dependencies git+https://bitbucket.org/pefarrell/fascd.git@master#egg=fascd
