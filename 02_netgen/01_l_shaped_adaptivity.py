@@ -21,11 +21,11 @@ def estimate_error(mesh, uh):
     n = FacetNormal(mesh)
     v = CellVolume(mesh)
 
-    # Compute error indicator cellwise
-    G = (
+    G = (  # compute cellwise error estimator
           inner(eta_sq / v, w)*dx
         - inner(h**2 * (f + div(grad(uh)))**2, w) * dx
         - inner(h('+')/2 * jump(grad(uh), n)**2, w('+')) * dS
+        - inner(h('-')/2 * jump(grad(uh), n)**2, w('-')) * dS
         )
 
     # Each cell is an independent 1x1 solve, so Jacobi is exact
