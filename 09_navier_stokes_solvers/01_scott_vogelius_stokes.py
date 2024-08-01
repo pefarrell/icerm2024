@@ -9,7 +9,7 @@ n = FacetNormal(mesh)
 
 # Define Scott--Vogelius function space W
 V = VectorFunctionSpace(mesh, "CG", 4)
-Q = FunctionSpace(mesh, "DG", 3)
+Q = FunctionSpace(mesh, "DG", 3, variant="integral")
 W = MixedFunctionSpace([V, Q])
 
 # Define Reynolds number and bcs
@@ -67,36 +67,18 @@ sp = {
                                    'pc_python_type': 'firedrake.ASMStarPC',
                                    'pc_type': 'python'},
                     },
-    'fieldsplit_1': {'ksp_type': 'preonly',
-                     'pc_python_type': __name__ + '.DGMassInv',
-                     'pc_type': 'python'},
+    'fieldsplit_1': {'ksp_type': 'richardson',
+                     'ksp_max_it': 1,
+                     'ksp_convergence_test': 'skip',
+                     'ksp_richardson_scale': 1,
+                     'pc_type': 'python',
+                     'pc_python_type': 'firedrake.MassInvPC',
+                     'Mp_pc_type': 'jacobi'},
 }
 
 
-class DGMassInv(PCBase):
-    def initialize(self, pc):
-        _, P = pc.getOperators()
-        appctx = self.get_appctx(pc)
-        V = dmhooks.get_function_space(pc.getDM())
-        # get function spaces
-        u = TrialFunction(V)
-        v = TestFunction(V)
-        massinv = assemble(Tensor(inner(u, v)*dx).inv)
-        self.massinv = massinv.petscmat
-
-    def update(self, pc):
-        pass
-
-    def apply(self, pc, x, y):
-        self.massinv.mult(x, y)
-        scaling = 2/float(Re) + float(gamma)
-        y.scale(-scaling)
-
-    def applyTranspose(self, pc, x, y):
-        raise NotImplementedError("Sorry!")
-
-
 # Solve problem
+sp['fieldsplit_1']['ksp_richardson_scale'] = -(2/float(Re) + float(gamma))
 solve(F == 0, w, bcs, solver_parameters=sp)
 
 # Monitor incompressibility
@@ -106,4 +88,4 @@ print(f"||div u||: {norm(div(u), 'L2'):.2e}")
 (u_, p_) = w.subfunctions
 u_.rename("Velocity")
 p_.rename("Pressure")
-File("output/stokes.pvd").write(u_, p_)
+VTKFile("output/stokes.pvd").write(u_, p_)
