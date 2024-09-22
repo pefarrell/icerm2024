@@ -1,6 +1,5 @@
 from firedrake import *
 from netgen.occ import *
-from ngsPETSc import NetgenHierarchy
 from numpy import linspace
 
 # Build 3x3 mesh of holes
@@ -18,7 +17,8 @@ for i in range(1, 4):
 
 geo = OCCGeometry(shape, dim=2)
 ngmesh = geo.GenerateMesh(maxh=1)
-mh = NetgenHierarchy(ngmesh, 2, order=1)
+base = Mesh(ngmesh)
+mh = MeshHierarchy(base, 2, netgen_flags={})
 mesh = mh[-1]
 d = mesh.geometric_dimension()
 
