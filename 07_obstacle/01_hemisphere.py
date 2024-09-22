@@ -27,4 +27,4 @@ solver = NonlinearVariationalSolver(problem, solver_parameters=sp)
 upper = Function(V).interpolate(Constant(1e10))
 solver.solve(bounds=(obstacle, upper))
 
-File("output/obstacle.pvd").write(u, obstacle)
+VTKFile("output/obstacle.pvd").write(u, obstacle)

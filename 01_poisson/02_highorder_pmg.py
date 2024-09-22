@@ -45,6 +45,6 @@ sp = {
 }
 
 solve(F == 0, u, bc, solver_parameters=sp)
-File("output/highorder.pvd").write(u)
+VTKFile("output/highorder.pvd").write(u)
 
 print(f"||u - u_ex||_H1: {norm(u - u_ex, 'H1')}")

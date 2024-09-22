@@ -53,4 +53,4 @@ solve(F == 0, w, bcs)
 (u_, p_) = w.subfunctions
 u_.rename("Velocity")
 p_.rename("Pressure")
-File("output/stokes.pvd").write(u_, p_)
+VTKFile("output/stokes.pvd").write(u_, p_)

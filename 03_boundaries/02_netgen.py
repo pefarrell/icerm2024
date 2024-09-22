@@ -32,4 +32,4 @@ bcs = [DirichletBC(V, +1, cube_labels),
 
 F = inner(grad(u), grad(v))*dx
 solve(F == 0, u, bcs)
-File("output/bclabels.pvd").write(u)
+VTKFile("output/bclabels.pvd").write(u)
