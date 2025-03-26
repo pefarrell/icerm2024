@@ -1,6 +1,5 @@
 from firedrake import *
 from netgen.occ import *
-from ngsPETSc import NetgenHierarchy
 
 # Netgen uses string labels
 cube = Box(Pnt(0,0,0), Pnt(1,1,1)).bc("cube")
@@ -18,8 +17,8 @@ sphere_labels = [i + 1 for (i, name) in
              enumerate(ngmesh.GetRegionNames(codim=1)) if name == "sphere"]
 
 # Make a high-order mesh of the union of cube and sphere
-mh = NetgenHierarchy(ngmesh, 0, order=3)
-mesh = mh[-1]
+base = Mesh(ngmesh)
+mesh = Mesh(base.curve_field(3))  # degree 3
 
 V = FunctionSpace(mesh, "CG", 1)
 u = Function(V, name="Solution")
@@ -32,4 +31,4 @@ bcs = [DirichletBC(V, +1, cube_labels),
 
 F = inner(grad(u), grad(v))*dx
 solve(F == 0, u, bcs)
-File("output/bclabels.pvd").write(u)
+VTKFile("output/bclabels.pvd").write(u)

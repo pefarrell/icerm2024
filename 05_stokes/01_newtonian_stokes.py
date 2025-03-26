@@ -1,6 +1,5 @@
 from firedrake import *
 from netgen.occ import *
-from ngsPETSc import NetgenHierarchy
 
 # Mesh: a hole removed from a rectangle
 disk = WorkPlane(Axes((0,0,0), n=Z, h=X)).Circle(1).Face()
@@ -14,7 +13,8 @@ domain.edges.Max(X).name = "outlet"
 geo = OCCGeometry(domain, dim=2)
 
 ngmesh = geo.GenerateMesh(maxh=1)
-mh = NetgenHierarchy(ngmesh, 2, order=2)
+base = Mesh(ngmesh)
+mh = MeshHierarchy(base, 2, netgen_flags={"degree": 2})
 mesh = mh[-1]
 
 walls = [i + 1 for (i, name) in
@@ -53,4 +53,4 @@ solve(F == 0, w, bcs)
 (u_, p_) = w.subfunctions
 u_.rename("Velocity")
 p_.rename("Pressure")
-File("output/stokes.pvd").write(u_, p_)
+VTKFile("output/stokes.pvd").write(u_, p_)

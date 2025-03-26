@@ -44,7 +44,7 @@ F = (
            + inner(grad(u), grad(v))*dx
     )
 
-output = File("output/heat.pvd")
+output = VTKFile("output/heat.pvd")
 output.write(u, time=t)
 
 # Main timestepping loop

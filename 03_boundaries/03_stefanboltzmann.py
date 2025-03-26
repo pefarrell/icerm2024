@@ -23,4 +23,4 @@ sp = {"snes_monitor": None,
       "snes_linesearch_monitor": None}
 solve(F == 0, u, solver_parameters=sp)
 
-File("output/stefanboltzmann.pvd").write(u)
+VTKFile("output/stefanboltzmann.pvd").write(u)

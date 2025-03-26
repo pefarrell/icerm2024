@@ -73,7 +73,7 @@ for i in range(max_iterations):
     print(f"Solving on level {i}")
 
     uh = solve_poisson(mesh)
-    File(f"output/adaptive_loop_{i}.pvd").write(uh)
+    VTKFile(f"output/adaptive_loop_{i}.pvd").write(uh)
 
     (eta, error_est) = estimate_error(mesh, uh)
     print(f"  ||u - u_h|| <= C x {error_est}")
@@ -90,7 +90,7 @@ plt.loglog(dofs, error_estimators, '-ok', label="Measured convergence")
 scaling = 1.5 * error_estimators[0]/dofs[0]**-(0.5)
 plt.loglog(dofs, np.array(dofs)**(-0.5) * scaling, '--', label="Optimal convergence")
 plt.xlabel("Number of degrees of freedom")
-plt.ylabel("Error estimate of energy norm $\sqrt{\sum_K \eta_K^2}$")
+plt.ylabel(r"Error estimate of energy norm $\sqrt{\sum_K \eta_K^2}$")
 plt.legend()
 plt.savefig("adaptive_convergence.png")
 #plt.show()

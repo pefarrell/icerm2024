@@ -46,7 +46,7 @@ t = factory.Constant(0)       # current time value
 stepper = TimeStepper(F, tableau, t, dt, u)
 T  = 1  # final time
 
-output = File("output/irksome_heat.pvd")
+output = VTKFile("output/irksome_heat.pvd")
 output.write(u, time=float(t))
 
 # Main timestepping loop

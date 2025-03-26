@@ -16,6 +16,6 @@ bc = DirichletBC(V, u_ex, "on_boundary")
 F = inner(grad(u), grad(v))*dx - f*v*dx
 
 solve(F == 0, u, bc)
-File("output/poisson.pvd").write(u)
+VTKFile("output/poisson.pvd").write(u)
 
 print(f"||u - u_ex||_H1: {norm(u - u_ex, 'H1')}")
